@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -17,8 +18,12 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true, 'password is required']
     },
-
-    
+    isVerified:{
+        type:Boolean,
+        default:false
+    },
+    emailVerificationToken:String,
+    emailVerificationTokenExpiresIn:Date,  
 },
 {
     timestamps:true
@@ -36,6 +41,14 @@ userSchema.pre("save", async function(){
         console.log(err);
     }
 })
+
+userSchema.methods.generateEmailVerificationToken = async function(){
+    const Token = crypto.randomBytes(32).toString('hex');
+    this.emailVerificationToken = Token;
+    this.emailVerificationTokenExpiresIn = Date.now() + 30 * 60 * 1000 // for 30 minutes
+    await this.save();
+    return Token;
+}
 
 
 const User = mongoose.model("User", userSchema);
