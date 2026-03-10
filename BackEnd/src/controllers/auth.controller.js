@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
       to: email,
       subject: "verify email",
       html: `
-                <h2>Hello ${name}!</h2>
+                <h2>Hello ${newUser.name}!</h2>
                 <p>Thanks for registering. Please verify your email by clicking the link below:</p>
                 <a href="${emailVerifyLink}" style="background:#4CAF50;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
                     Verify Email
@@ -54,6 +54,53 @@ const registerUser = async (req, res) => {
   }
 };
 
+/*resend verify email*/
+const resendVerifyEmail = async (req, res)=>{
+
+  try {
+      const {email} = req.body;
+      const user = await User.findOne({
+        email,
+        isVerified:false,
+      });
+      if(!user){
+        return res.status(500).json({
+          message:'no unverified account with this email'
+        });
+      };
+
+    if(user.emailVerificationToken && user.emailVerificationTokenExpiresIn > Date.now()){
+      return res.status(400).json({
+        message:'please check your inbox , link expires in 30 minutes'
+      })
+    }
+
+    const Token = await user.generateEmailVerificationToken();
+    const emailVerifyLink = `http://localhost:3000/api/auth/verify-email/${Token}`;
+    
+    await sendEmail({
+      to: email,
+      subject: "verify email",
+      html: `
+                <h2>Hello ${user.name}!</h2>
+                <p>Thanks for registering. Please verify your email by clicking the link below:</p>
+                <a href="${emailVerifyLink}" style="background:#4CAF50;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+                    Verify Email
+                </a>
+                <p>This link expires in 30 minutes.</p>
+                <p>If you didn't register, ignore this email.</p>`,
+    });
+
+    res.status(200).json({
+      success:true,
+      messgae:'new verification email is sent ! please check your inbox.'
+    });
+
+
+  } catch (error) {
+    res.status(500).json({message:'server error', error:error.message});
+  }
+}
 /**when user clicks verify email then verify email */
 const verifyEmail = async (req, res) => {
   try {
@@ -133,4 +180,4 @@ const loginUser = async (req, res) => {
 
 
 
-module.exports = { registerUser, verifyEmail, loginUser };
+module.exports = { registerUser, verifyEmail, resendVerifyEmail, loginUser };
