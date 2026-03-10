@@ -14,5 +14,11 @@ module.exports = {
         user:process.env.EMAIL_USER,
         pass:process.env.EMAIL_PASS,
         email_from:process.env.EMAIL_FROM,
+    },
+    jwt:{
+        secret:process.env.SECRET_KEY || 'fallback_secret',
+        expiresIn:process.env.SECRET_EXPIRES_IN || '15m',
+        refreshSecret:process.env.REFRESH_SECRET_KEY || 'falback_refresh_secret',
+        refreshExpires:process.env.REFRESH_SECRET_EXPIRES_IN || '30d'
     }
 }

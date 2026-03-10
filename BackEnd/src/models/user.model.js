@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    refreshToken:String,
     emailVerificationToken:String,
     emailVerificationTokenExpiresIn:Date,  
 },
@@ -41,6 +42,10 @@ userSchema.pre("save", async function(){
         console.log(err);
     }
 })
+
+userSchema.methods.comparePassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
+}
 
 userSchema.methods.generateEmailVerificationToken = async function(){
     const Token = crypto.randomBytes(32).toString('hex');
