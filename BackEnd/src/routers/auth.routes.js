@@ -4,16 +4,16 @@ const {
     registerUser, 
     verifyEmail, 
     loginUser, 
-    resendVerifyEmail,
-    logout,
+    resendEmail,
+    logoutUser,
     currentUser,
     renewAcessToken} = require('../controllers/auth.controller');
 
 router.post('/registerUser', registerUser);
 router.get('/verify-email/:token', verifyEmail);
-router.post('/resend-email',resendVerifyEmail);
+router.post('/resend-email',resendEmail);
 router.post('/login', loginUser);
-router.get('/logout', logout);
+router.get('/logout', logoutUser);
 router.get('/user', currentUser)
 router.post('/refresh-token', renewAcessToken)
 
