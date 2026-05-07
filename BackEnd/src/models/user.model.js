@@ -25,6 +25,12 @@ const userSchema = new mongoose.Schema({
     refreshToken:String,
     emailVerificationToken:String,
     emailVerificationTokenExpiresIn:Date,  
+
+    role :{
+        type : String,
+        enum : ["admin", "manager", "user"],
+        required: true,
+    }
 },
 {
     timestamps:true

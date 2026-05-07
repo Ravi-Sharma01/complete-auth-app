@@ -1,6 +1,7 @@
 const express = require('express')
 const connectDB = require('./config/db.config')
-const authRoutes = require('./routers/auth.routes')
+const authRoutes = require('./routers/auth.route')
+const userRoutes = require('./routers/user.route');
 const cookieParser = require('cookie-parser')
 
 
@@ -11,6 +12,7 @@ app.use(cookieParser());
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.get('/',(req, res)=>{
     res.send('server started');
 })

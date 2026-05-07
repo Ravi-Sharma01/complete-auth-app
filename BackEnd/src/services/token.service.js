@@ -58,6 +58,7 @@ class TokenService {
     const payload = {
       id: user._id,
       email: user.email,
+      role: user.role
     };
 
     const newAccesToken = await this.generateAccessToken(payload);

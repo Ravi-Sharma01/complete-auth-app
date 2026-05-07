@@ -11,7 +11,7 @@ class UserService {
     return user;
   }
 
-  static async register({ name, email, password }) {
+  static async register({ name, email, password , role}) {
     const user = await this.#getUserByEmail({ email });
 
     if (user) {
@@ -20,7 +20,7 @@ class UserService {
       throw error;
     }
 
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ name, email, password , role});
     await newUser.save();
 
     const token = await newUser.generateEmailVerificationToken();
@@ -42,7 +42,7 @@ class UserService {
     const matchPassword = await user.comparePassword(password);
     if (!matchPassword) throw new Error("invalid email or wrong password");
 
-    const payload = { id: user._id, email: user.email };
+    const payload = { id: user._id, email: user.email , role:user.role};
     const accessToken = TokenService.generateAccessToken(payload);
     const refreshToken = TokenService.generateRefreshToken(payload);
 
@@ -56,6 +56,7 @@ class UserService {
         id: user._id,
         name: user.name,
         email: user.email,
+        
       },
     };
   }

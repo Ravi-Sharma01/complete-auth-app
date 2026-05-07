@@ -15,8 +15,8 @@ const TokenService = require("../services/token.service");
 /*register user if user created send a notication to verify email */
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    const user = await UserService.register({ name, email, password });
+    const { name, email, password, role } = req.body;
+    const user = await UserService.register({ name, email, password, role });
 
     return res.status(201).json({
       message:
