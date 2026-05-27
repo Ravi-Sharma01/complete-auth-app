@@ -6,8 +6,8 @@ const authorize = (...alloweRoles) =>{
         })
         console.log(alloweRoles.includes(req.user.role));
         
-        
-        if(!alloweRoles.includes(req.user.role)) return res.status(403).json({
+        const hasRole = alloweRoles.includes(req.user.role);
+        if(!hasRole) return res.status(403).json({
                 message:'Access denied'
             })
             console.log(req.user.role);

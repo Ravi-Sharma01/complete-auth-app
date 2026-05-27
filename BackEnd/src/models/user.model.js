@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { type } = require('os');
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -28,7 +29,10 @@ const userSchema = new mongoose.Schema({
 
     role :{
         type : String,
-        enum : ["admin", "manager", "user"],
+        role : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Role'
+        },
         required: true,
     }
 },
