@@ -94,17 +94,27 @@ const loginUser = async (req, res) => {
 };
 
 const renewAcessToken = async (req, res) => {
-  const token = req.cookies.refreshToken;
-  const {newAccesToken, newRefreshToken} = await TokenService.renewToken(token);
-  res.cookie("accessToken", newAccesToken, {
-    httpOnly: true,
-  });
-  res.cookie("refreshToken", newRefreshToken, {
-    httpOnly: true,
-  });
-  res.status(200).json({
-    messGE: "TOKEN RENEWED",
-  });
+  try {
+    const token = req.cookies.refreshToken;
+    const {newAccesToken, newRefreshToken} = await TokenService.renewToken(token);
+    res.cookie("accessToken", newAccesToken, {
+      httpOnly: true,
+      secure:false,
+      maxAge : 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure:false,
+      maxAge :  30 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
+      message: "TOKEN RENEWED",
+    });
+  } catch (error) {
+    res.status(401).json({
+      message: error.message,
+    });
+  }
 };
 
 const logoutUser = async (req, res) => {
@@ -125,13 +135,20 @@ const logoutUser = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-  const token = req.cookies.accessToken;
-  const user = await UserService.userProfile({token});
-
-  res.status(200).json({
-    success: true,
-    user,
-  });
+  try {
+    const token = req.cookies.accessToken;
+    const user = await UserService.userProfile({token});
+  
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+     res.status(401).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {

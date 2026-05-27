@@ -1,104 +1,78 @@
-# ══════════════════════════════════════════════
-#   .gitignore
-#   Covers: Node.js backend + React Vite frontend
-# ══════════════════════════════════════════════
+# Dependencies
+node_modules/
+**/node_modules/
+.npm/
 
-
-# ─────────────────────────────────────────────
-#  ENVIRONMENT VARIABLES
-#  Never push secrets to GitHub
-# ─────────────────────────────────────────────
+# Environment variables
 .env
 .env.local
 .env.development
 .env.production
 .env.test
 .env.*.local
+!.env.example
 
-
-# ─────────────────────────────────────────────
-#  NODE MODULES
-#  Installed via npm install — never push
-# ─────────────────────────────────────────────
-node_modules/
-.npm
-
-
-# ─────────────────────────────────────────────
-#  BUILD OUTPUT
-#  Generated files — not source code
-# ─────────────────────────────────────────────
+# Build output
 dist/
+dist-ssr/
 build/
 out/
+**/dist/
+**/dist-ssr/
+**/build/
+**/out/
 
-
-# ─────────────────────────────────────────────
-#  LOGS
-# ─────────────────────────────────────────────
+# Logs
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-
-# ─────────────────────────────────────────────
-#  VITE CACHE
-# ─────────────────────────────────────────────
+# Vite / tool cache
 .vite/
+**/.vite/
 vite.config.js.timestamp-*
+.cache/
+**/.cache/
 
+# Test coverage
+coverage/
+**/coverage/
+.nyc_output/
+**/.nyc_output/
 
-# ─────────────────────────────────────────────
-#  OPERATING SYSTEM FILES
-# ─────────────────────────────────────────────
+# Temporary files
+tmp/
+temp/
+**/tmp/
+**/temp/
 
-# macOS
+# Certificates and keys
+*.pem
+*.key
+*.cert
+
+# Editor / IDE files
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+
+# OS files
 .DS_Store
 .AppleDouble
 .LSOverride
 Thumbs.db
-
-# Windows
 desktop.ini
 $RECYCLE.BIN/
-
-# Linux
 *~
-
-
-# ─────────────────────────────────────────────
-#  EDITOR / IDE FILES
-# ─────────────────────────────────────────────
-
-# VS Code
-.vscode/
-!.vscode/extensions.json
-
-# JetBrains (WebStorm, IntelliJ)
-.idea/
-*.iml
-
-# Vim
-*.swp
-*.swo
-
-
-# ─────────────────────────────────────────────
-#  TESTING
-# ─────────────────────────────────────────────
-coverage/
-.nyc_output/
-
-
-# ─────────────────────────────────────────────
-#  MISC
-# ─────────────────────────────────────────────
-*.pem
-*.key
-*.cert
-.cache/
-tmp/
-temp/
