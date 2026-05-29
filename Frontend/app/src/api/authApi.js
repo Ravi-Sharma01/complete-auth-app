@@ -14,3 +14,6 @@ export const userProfile = async()=>{
 export const logoutUser = async()=>{
     return await axiosInsatance.get('/auth/logout');
 }
+export const refreshAccessToken = async()=>{
+    return await axiosInsatance.post('/auth/refresh-token');
+}

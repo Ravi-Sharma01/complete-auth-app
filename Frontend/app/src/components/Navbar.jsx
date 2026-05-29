@@ -16,7 +16,7 @@ const Navbar = () => {
         color: "white",
       }}
     >
-      <h2 style={{ margin: 0 }}>MyBrand</h2>
+      <h2 style={{ margin: 0 }}>Auth App</h2>
 
       <div style={{ display: "flex", gap: "20px" }}>
         <NavLink to="/" style={{ color: "white", textDecoration: "none" }}>
