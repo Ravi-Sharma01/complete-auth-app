@@ -36,7 +36,11 @@ class UserService {
     }
 
     if (!user.isVerified) {
-      throw new Error("email is not verifed please verify your email");
+      
+      await EmailService.resendVerificationEmail({email});
+      throw new Error("NOT_VERIFIED");
+      // return 
+
     }
 
     const matchPassword = await user.comparePassword(password);

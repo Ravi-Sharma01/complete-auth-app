@@ -41,9 +41,14 @@ export const AuthProvider = ({children})=>{
 
 
     const logout = async()=>{
-        const res = await logoutUser();
-        setUser(null);
-        return res;
+        setUser(null); // imidiate logout without waiting response from server
+        try {
+            const res = await logoutUser();
+           
+            return res;
+        } catch (error) {
+             console.error("Backend logout failed, but user session cleared locally", error);
+        }
     };
 
 
@@ -91,6 +96,8 @@ export const AuthProvider = ({children})=>{
                     
                 } catch (refresherror) {
                     processQueue(refresherror); //with errors
+                    setUser(mull);
+                    return Promise.reject(refresherror);
                 }finally{
                     isRefreshing.current = false; //when token is renewd then then set isRefreshing falsee
                 }

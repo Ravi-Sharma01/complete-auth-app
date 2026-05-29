@@ -86,6 +86,11 @@ const loginUser = async (req, res) => {
       user
     });
   } catch (error) {
+    if(error.message === 'NOT_VERIFIED'){
+      return res.status(403).json({
+        message:"Email is not verified. Please check your inbox, a verification email has been sent."
+      })
+    }
     res.status(500).json({
       message: "server error",
       error: error.message,
