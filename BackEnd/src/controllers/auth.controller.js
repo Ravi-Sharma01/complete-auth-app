@@ -156,6 +156,37 @@ const currentUser = async (req, res) => {
   }
 };
 
+const forgetPassword = async (req, res)=>{
+  try {
+    const {email} = req.body;
+    await userService.forgetPassword({email});
+    return res.status(200).json({
+      message:'check you email to reset password'
+    });
+    
+  } catch (error) {
+    return res.status(400).json({
+      message: 'something went wrong',
+      error:error.message,
+    })
+  }
+};
+
+const resetPassword = async(req, res) =>{
+  try {
+    const {token, password} = req.body; 
+    await userService.resetPassword({token, password});
+    return res.status(200).json({
+      message:'your password updated successfully'
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      message:'password cant not updated!',
+      error: error.message,
+    })
+  }
+}
 module.exports = {
   registerUser,
   verifyEmail,
@@ -164,6 +195,8 @@ module.exports = {
   logoutUser,
   currentUser,
   renewAcessToken,
+  forgetPassword,
+  resetPassword,
 };
 
 

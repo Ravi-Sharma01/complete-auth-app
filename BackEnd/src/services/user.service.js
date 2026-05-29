@@ -6,12 +6,10 @@ class UserService {
   //register a user
 
   static async #getUserByEmail({ email }) {
-    const user = User.findOne({ email });
-    if (!user) return null;
-    return user;
+    return await User.findOne({ email });
   }
 
-  static async register({ name, email, password , role}) {
+  static async register({ name, email, password, role }) {
     const user = await this.#getUserByEmail({ email });
 
     if (user) {
@@ -20,7 +18,7 @@ class UserService {
       throw error;
     }
 
-    const newUser = new User({ name, email, password , role});
+    const newUser = new User({ name, email, password, role });
     await newUser.save();
 
     const token = await newUser.generateEmailVerificationToken();
@@ -36,17 +34,15 @@ class UserService {
     }
 
     if (!user.isVerified) {
-      
-      await EmailService.resendVerificationEmail({email});
+      await EmailService.resendVerificationEmail({ email });
       throw new Error("NOT_VERIFIED");
-      // return 
-
+      // return
     }
 
     const matchPassword = await user.comparePassword(password);
     if (!matchPassword) throw new Error("invalid email or wrong password");
 
-    const payload = { id: user._id, email: user.email , role:user.role};
+    const payload = { id: user._id, email: user.email, role: user.role };
     const accessToken = TokenService.generateAccessToken(payload);
     const refreshToken = TokenService.generateRefreshToken(payload);
 
@@ -60,7 +56,6 @@ class UserService {
         id: user._id,
         name: user.name,
         email: user.email,
-        
       },
     };
   }
@@ -74,7 +69,7 @@ class UserService {
     const user = await User.findById({ _id: decode.id });
     user.refreshToken = undefined;
     await user.save();
-  } 
+  }
 
   static async userProfile({ token }) {
     if (!token) {
@@ -92,6 +87,37 @@ class UserService {
     if (!user) throw new Error("please login");
 
     return user;
+  }
+
+  static async forgetPassword({ email }) {
+    if (!email) throw new Error("email is required");
+
+    const user = await this.#getUserByEmail({ email });
+
+    if (!user) throw new Error("user not found , please register!");
+
+    const token = await  user.generatepasswordResetToken();
+    const name = user.name;
+    const response = await EmailService.sendPasswordResetEmail({name, email, token});
+    
+  }
+
+  static async resetPassword({ token , password }) {
+   if (!token) throw new Error("reset password token is required");
+   if (!password) throw new Error("password is required");
+
+   const user = await User.findOne({
+      passwordToken: token,
+      passwordTokenExpiresIn: { $gt: Date.now() } // $gt means "greater than"
+    });
+   
+    if(!user) throw new Error('reset password link expired try again later')
+
+   
+    user.password = password;
+    user.passwordToken = undefined;
+    user.passwordTokenExpiresIn=undefined;
+    await user.save(); 
   }
 }
 

@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
     refreshToken:String,
     emailVerificationToken:String,
     emailVerificationTokenExpiresIn:Date,  
+    passwordToken: String,
+    passwordTokenExpiresIn:Date,
 
     role :{
         type : String,
@@ -64,6 +66,14 @@ userSchema.methods.generateEmailVerificationToken = async function(){
     this.emailVerificationTokenExpiresIn = Date.now() + 30 * 60 * 1000 // for 30 minutes
     await this.save();
     return Token;
+}
+
+userSchema.methods.generatepasswordResetToken = async function(){
+    const token = crypto.randomBytes(32).toString('hex');
+    this.passwordToken = token;
+    this.passwordTokenExpiresIn = Date.now() + 5 * 60 * 1000 // for 5 minutes
+    await this.save();
+    return token;
 }
 
 

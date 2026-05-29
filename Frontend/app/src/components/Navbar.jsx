@@ -25,7 +25,7 @@ const Navbar = () => {
 
         {!loading && user ? (
           <>
-            <span>Welcome, {user.name}</span>
+            <span>Welcome, {user?.name}</span>
 
             <NavLink
               to="/profile"

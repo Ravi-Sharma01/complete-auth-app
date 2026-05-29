@@ -1,3 +1,4 @@
+import { data } from 'react-router-dom';
 import axiosInsatance from '../services/axiosInstance'
 
 export const registerUser = async(data)=>{
@@ -17,3 +18,13 @@ export const logoutUser = async()=>{
 export const refreshAccessToken = async()=>{
     return await axiosInsatance.post('/auth/refresh-token');
 }
+
+export const forgetPassword = async(data)=>{
+    return await axiosInsatance.post('/auth/forget-password', data);
+}
+
+export const resetPassword = async(data)=>{
+    return await axiosInsatance.post(`/auth/reset-password`,data );
+}
+
+
